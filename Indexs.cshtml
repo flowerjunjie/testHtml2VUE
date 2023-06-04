@@ -1,0 +1,1036 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <link href="~/CSS/Bh/index.css?V=1.0.5" rel="stylesheet" />
+    <link href="~/CSS/Bh/iconfont.css?V=1.0.2" rel="stylesheet" />
+    <link href="https://sms.czfw.cn/mui/mui.min.css" rel="stylesheet" />
+    <link href="https://sms.czfw.cn/mui/mui.picker.min.css" rel="stylesheet" />
+    <link href="~/CSS/Bh/loading.css" rel="stylesheet" />
+    <script src="https://sms.czfw.cn/mui/tdt.js"></script>
+    <title>中国移动官方合作商</title>
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+
+        .mui-toast-container {
+            top: 30% !important;
+        }
+        /* .mui-input-group {
+            height: 80.4vw !important;
+        }*/
+        .control {
+            width: 50.5333vw !important;
+        }
+
+        .time_info {
+            width: 60.6667vw !important;
+        }
+
+        body {
+            background-color: black !important;
+        }
+        /*此代码用来解决ios16.4下面导致的选项白条*/
+        .mui-picker-inner {
+            mask-image: linear-gradient(to top, transparent, #fff) !important;
+            -webkit-mask-image: linear-gradient(to top, transparent, #fff) !important;
+            background-color: #fff !important;
+        }
+
+        .my {
+            width: 6.4vw;
+            height: 17.0667vw;
+            background: linear-gradient(180deg,#FFA477,#EE4E00);
+            font-size: 3.2vw;
+            color: #fff;
+            text-align: center;
+            word-wrap: break-word;
+            position: fixed;
+            right: 0;
+            top: 6.4vw;
+            border-radius: 2vw 0 0 2vw;
+            writing-mode: tb-rl;
+        }
+    </style>
+</head>
+<body class="pb">
+    <div id="loadingBox" class="mui-pull refuel-loading">
+        <div class="mui-pull-loading mui-icon mui-spinner  mui-spinner-white" style=""></div>
+        <span class="mui-pull-caption">提交中...</span>
+    </div>
+    <div id="loadingBoxs" class="mui-pull refuel-loading">
+        <div class="mui-pull-loading mui-icon mui-spinner  mui-spinner-white" style=""></div>
+        <span class="mui-pull-caption">加载中...</span>
+    </div>
+    <div id="app" v-cloak>
+        <img class="top" src="https://sms.czfw.cn/images/xxl/banerxxl.jpg">
+        <div class="my" v-on:click="goCoupon">我的订单</div>
+        <div class="time">
+            <div class="time_info">
+                <div>
+                    <div>133***8796已抢订 5分钟前</div>
+                    <div>155***5616已抢订 5分钟前</div>
+                    <div>178***0096已抢订 5分钟前</div>
+                    <div>198***8096已抢订 5分钟前</div>
+                    <div>156***9166已抢订 5分钟前</div>
+                    <div>150***8078已抢订 5分钟前</div>
+                </div>
+            </div>
+
+        </div>
+        <div style="color: red; font-size: 12px; text-align: center; ">请注意 ：号码归属地须与收货地址一致才可报名申领！</div>
+        <div class="information">
+            <form class="mui-input-group">
+                @*<div class="mui-input-row">
+            <label>号码归属地</label>
+            <div type="text" class="mui-input-clear" id="showCityPicker" style="margin-top:8px">
+                {{cityName}}
+            </div>
+        </div>*@
+
+                <div class="mui-input-row">
+                    @*style="display:none;" id="hiddenTel"*@
+                    <label>手机号码</label>
+                    <input type="number" oninput="if(value.length>11)value=value.slice(0,11)" class="mui-input-clear" placeholder="请填写收货人手机号码" id="txtContactMobile">
+                </div>
+                <div class="mui-input-row">
+                    <label>收货省市</label>
+                    <input type="text" class="mui-input-clear selcet_city" onclick="citySelect()" placeholder="请选择收货省市">
+                </div>
+                <div class="mui-input-row">
+                    <label>详细地址</label>
+                    <input type="text" id="txtAddress" class="mui-input-clear" placeholder="街道、楼牌号等" maxlength="100">
+                </div>
+                <div class="mui-input-row" id="hiddenMobile" style="display:none;">
+                    <label>姓名</label>
+                    <input type="text" id="txtUserName" maxlength="6" class="mui-input-clear" placeholder="输入办理人姓名（已加密）">
+                </div>
+                <div class="mui-input-row" style="display:none;" id="hiddenCard">
+                    <label>身份证号</label>
+                    <input type="text" class="mui-input-clear" placeholder="请填写选号人身份证号码" id="txtCard" maxlength="18">
+                </div>
+                <div class="mui-input-row" style="display:none">
+                    <label>选择号码</label>
+                    <input type="text" class="mui-input-clear" placeholder="可自选手机号码" readonly="readonly" id="txtFreeMobile">
+                    <input id="txtFreeCheckcode" hidden="hidden" />
+                    <div class="select_phone" v-on:click="phoneSelect()">选号</div>
+                </div>
+
+
+
+
+                <input hidden="hidden" id="txtProviceCode" />
+                <input hidden="hidden" id="txtCityCode" />
+                <input hidden="hidden" id="txtCountycode" />
+
+
+                <div class="mui-input-row mui-plus-visible">
+                    <label>Input</label>
+                    <input type="text" class="mui-input-speech mui-input-clear" placeholder="语音输入">
+                </div>
+
+            </form>
+            <div class="info_one">*请填写真实身份信息，未满16周岁/联系电话/收货地址错误无法发货</div>
+            <div class="agree">
+                <input type="checkbox" class="sel" id="checkIds" style="width:15px;">
+                <span class="info_two" onclick="moveInfo()">
+                    阅读并同意《中国移动用户入网协议》《关于客户个人信息收集，使用规则的公告》、《实名制信息安全责任告知书》
+                </span>
+            </div>
+            <img class="btn" src="https://sms.czfw.cn/images/xxl/btn.png" v-on:click="confirm">
+            <img class="discount_one" src="https://sms.czfw.cn/images/xxl/bg_02.png">
+            <div style="position: relative;">
+                <img class="discount_two" src="https://sms.czfw.cn/images/xxl/bg_03.png">
+                <div class="capacity" onclick="capacityDetail()"></div>
+            </div>
+
+            <img class="discount_three" src="https://sms.czfw.cn/images/xxl/new/bg_05.png?V=1.0.3">
+            <div class="bottom">
+                <div class="bottom_one" style=" color: white !important;">*具体资费以实际产品为准</div>
+                <div class="bottom_two" style=" color: white !important;">个人擅自买卖实名电话卡属违法行为，请勿将号卡租借、贩卖给他人，如被他人利用发生涉恐、诈骗、骚扰等非法违规行为，您将承担相应法律责任，请您确保规范使用您的号码。<span style="color: white; text-decoration: underline;" onclick="seeDetail()">查看详情</span></div>
+                <div class="bottom_three" style="display: none;">/ / / / / / / / / / 业务规则 / / / / / / / / / /</div>
+                <div class="bottom_four" style="display: none;">
+                    业务规则
+
+                </div>
+            </div>
+            <div class="more">
+                <div class="more_text">更多</div>
+                <div class="iconfont icon-gengduo more_icon"></div>
+            </div>
+
+        </div>
+        <div class="mask"></div>
+        <div class="windows">
+            <div class="win_top">
+                <div class="time_title">犹豫太久，号码会被人抢走哦！</div>
+                <div class="time_count">
+                    <div class="minute"></div>:
+                    <div class="second"></div>
+                </div>
+            </div>
+            <div class="win_icon iconfont icon-chahao" onclick="closePhone()"></div>
+            <div class="phone_search">
+                <form class="mui-input-row mui-search refuel-search" action="" id="myform">
+                    <input type="search" v-model="mobilePhone" class="mui-input-clear" placeholder="生日、幸运数字等4位数字" maxlength="4">
+                    <input type="number" style="display: none;" />
+                </form>
+            </div>
+            <div class="phone_list">
+                <div v-for="(item,index) in numberList">
+                    <div class="phone" v-on:click="selectNumber(item.number,item.checkCode)">
+                        <span v-html="getBeautifulPhone(item.number)"></span>
+                        <img class="icon" src="https://sms.czfw.cn/images/xxl/icon.png">
+                    </div>
+                </div>
+            </div>
+            <div class="control">
+                <div class="refurbish" @@click="pageDown()">
+                    <span class="iconfont icon-shuaxin"></span>换一批
+                </div>
+            </div>
+        </div>
+        <div class="windows1">
+            <div class="win_title">专属流量APP清单</div>
+            <div class="win_icon iconfont icon-chahao" onclick="closeCapacity()"></div>
+            <div class="capacity_info">
+                中国移动精品 APP：咪咕视频、咪咕音乐、咪咕阅读、咪咕快游、MM 应用商城、和彩云
+
+            </div>
+        </div>
+        <div class="windows2">
+            <div class="win_title">中国移动通信客户服务协议</div>
+            <div class="win_icon iconfont icon-chahao" onclick="closeMove()"></div>
+            <div class="capacity_info">
+                本协议由客户与中国移动通信有限公司（以下简称"公司"）签署。
+
+            </div>
+        </div>
+        <div class="windows3">
+            <div class="win_icon iconfont icon-chahao" onclick="closeSee()"></div>
+            <img src="https://sms.czfw.cn/images/xxl/see.jpg" class="see">
+        </div>
+        <div class="windows4">
+            <div class="win_icon iconfont icon-chahao" onclick="closeSuc()"></div>
+            <img src="https://sms.czfw.cn/images/xxl/suc.jpg" class="suc">
+        </div>
+
+
+    </div>
+    <script src="https://sms.czfw.cn/mui/jquery-3.4.1.min.js"></script>
+    <script src="https://sms.czfw.cn/mui/mui.min.js"></script>
+    <script src="~/Scripts/Bh/data.city.js"></script>
+    <script src="https://sms.czfw.cn/mui/mui.picker.all.js"></script>
+    <script src="https://sms.czfw.cn/mui/vue/2.6.10/vue.min.js"></script>
+    <script src="https://sms.czfw.cn/qs/qs.min.js"></script>
+    <script src="https://sms.czfw.cn/axios/axios.min.js"></script>
+    <script src="~/Scripts/Bh/tys.js"></script>
+    <script>
+        mui.init({});
+        var options = { enableHighAccuracy: true, timeout: 5000, maximumAge: 1 };
+        var qs = Qs;
+        var app = new Vue({
+            el: '#app',
+            data: {
+                cityName: '请选择省市',
+                numberList: [],//存放手机号码
+                pageNo: 1,
+                ruleRadio: false,
+                mobilePhone: '',
+                appid:'@ViewBag.appid'
+            },
+            created() {
+
+            },
+            mounted() {
+                var that = this;
+                $('#loadingBoxs').show();
+                that.Getlocation();
+            },
+            methods: {
+                goCoupon() {
+                    window.location.href = "myOrder"
+                },
+                onloadphone() {
+                    var that = this;
+                    //获取到省市区了，要给另一个省市区赋值，赋值完成之后，要拉取手机号码
+                    var goodsCityName = '';
+                    if (sessionStorage.getItem('goodsCityName')) {
+                        goodsCityName = sessionStorage.getItem('goodsCityName')
+                    }
+
+                    /*
+                     sessionStorage.setItem('goodsProvinceName', "北京");
+                     sessionStorage.setItem('goodsCityName',"北京市");
+                     */
+                    document.activeElement.blur();//隐藏软键盘
+                    //选择省市区
+                    var city_picker = new mui.PopPicker({ layer: 3 });
+                    city_picker.setData(init_city_picker);
+
+
+                    var pos = that.getpositionJarrayTest(init_city_picker, goodsCityName);
+                    console.log(pos);
+                    if (pos[0] == "-1") { }
+                    else {
+                        city_picker.pickers[0].setSelectedIndex(pos[0]);
+                        city_picker.pickers[1].setSelectedIndex(pos[1]);
+                        //city_picker.show(function (SelectedItem) {
+                        //    console.log(SelectedItem);
+                        //})
+                        var cc = city_picker.getSelectedItems();
+                        console.log(cc);
+                        console.log(cc[0].text);
+                        console.log(cc[0].children[pos[1]].text);
+                        console.log(cc[0].children[pos[1]].children[0].text);
+
+                        $(".selcet_city").val(cc[0].text + cc[0].children[pos[1]].text + cc[0].children[pos[1]].children[0].text);
+                        $("#txtProviceCode").val(cc[0].value);
+                        $("#txtCityCode").val(cc[0].children[pos[1]].value);
+                        $("#txtCountycode").val(cc[0].children[pos[1]].children[0].value);
+                        that.onloadphones();
+                    }
+                },
+                onloadphones() {
+                    var that = this;
+                    //if (that.cityName == '请选择省市') {
+                    //    mui.toast('请选择您所在的省份');
+                    //    return false;
+                    //}
+
+                    var goodsProvinceCode = '';
+                    var goodsCityCode = '';
+                    if (sessionStorage.getItem('goodsProvinceCode')) {
+                        goodsProvinceCode = sessionStorage.getItem('goodsProvinceCode')
+                    }
+                    if (sessionStorage.getItem('goodsCityCode')) {
+                        goodsCityCode = sessionStorage.getItem('goodsCityCode')
+                    }
+                    if (goodsProvinceCode == '' || goodsCityCode == '') {
+                        mui.toast('请选择您所在的省份');
+                        return false;
+                    }
+                    $('#loadingBoxs').show();
+                      var that = this;
+                    axios.post('@Url.Action("getPhoneSelect")', qs.stringify({ provinceCode: goodsProvinceCode, cityCode: goodsCityCode, numberKeyword: '' }))
+                    .then(function (response) {
+                        $('#loadingBoxs').hide();
+                        console.log("握手返回的");
+                        console.log(response);
+                        console.log(response.data.data);
+                        if (response.data.code == "-1") {
+                            mui.toast(response.data.message);
+                            return false;
+                        }
+                        else if (response.data.code == 50) {
+                            mui.toast(response.data.message);
+                            return false;
+                        }
+                        else {
+                            //response.data.data;//that.numberList.concat
+                            console.log('我走到了这里');
+                            var list = response.data.data;
+                            for (var i = 0; i < list.length; i++) {
+                                if (i == 1) {
+                                    console.log(list[i].number)
+                                    console.log(list[i].checkCode)
+                                    $("#txtFreeMobile").val(list[i].number);
+                                    $("#txtFreeCheckcode").val(list[i].checkCode);
+                                }
+                            }
+
+                            //console.log(that.numberList)
+                        }
+                    })
+                    .catch(function (error) {
+                        mui.toast("获取号码出错，请稍后重试");
+                        return false;
+                    });
+                },
+                getHighLight(word) {
+                    var reg = this.hWord.join("|");
+                    return word.replace(new RegExp(reg, "ig"), (a) => {
+                        return `<span style="color:blue;">${a}</span>`;
+                    });
+                },
+                getBeautifulPhone(phoneNum) {
+                    // 正则规则
+                    var regexArrs = [
+                        {
+                            regex: /(123|234|345|456|567|678|789|987|876|765|654|543|432|321){2}/,
+                            type: '双顺子'
+                        },
+                        {
+                            regex: /(\d)\1{2,}/,
+                            type: 'AAA'
+                        },
+                        {
+                            regex: /(\d{3,4})\1/,
+                            type: 'ABCDABCD'
+                        },
+                        {
+                            regex: /12345|23456|34567|45678|56789|98765|87654|76543|65342|54321|78910/,
+                            type: '事业靓号'
+                        },
+                        {
+                            regex: /(\d)\1(\d)\2/,
+                            type: 'AABB'
+                        },
+                        {
+                            regex: /(\d)(\d)\1\2/,
+                            type: 'ABAB'
+                        },
+                        {
+                            regex: /(\d)(\d)\2\1/,
+                            type: 'ABBA'
+                        },
+                        {
+                            regex: /1234|2345|3456|4567|5678|6789|9876|8765|7654|6543|5432|4321/,
+                            type: '发达靓号'
+                        },
+                        {
+                            regex: /123|234|345|456|567|678|789|987|876|756|645|534|432|321/,
+                            type: '发达靓号'
+                        },
+                        {
+                            regex: /1314|520|521/,
+                            type: '天长地久'
+                        },
+                        {
+                            regex: /(?:168|369|68|69|89|96)$/,
+                            type: '发达靓号'
+                        },
+                        {
+                            regex: /(\d)(\d)\1(\d)/,
+                            type: 'ABAC'
+                        },
+                        {
+                            regex: /(\d)(\d)\1/,
+                            type: 'ACA'
+                        },
+                        {
+                            regex: /(\d)((\d)(\d))\1/,
+                            type: 'ABCA'
+                        },
+                        {
+                            regex: /(\d)\1/,
+                            type: 'AA'
+                        },
+                        {
+                            regex: /(\d).*?\1.*?\1.*?\1.*?\1/,
+                            type: '发达靓号',
+                            replacer: (e, t) => {
+                                return e.split('').map((e) => {
+                                    return e === t[1] ? 1 : 0
+                                }).join('')
+                            }
+                        }
+                    ]
+                    phoneNum = String(phoneNum)
+                    var phoneColors = '00000000000'
+                    var phoneType = ''
+                    for (var index = 0; index < regexArrs.length; index++) {
+                        var item = regexArrs[index]
+                        var regex = item.regex
+                        var type = item.type
+                        var replacer = item.replacer
+                        var isMatched = phoneNum.match(regex)
+                        if (isMatched) {
+                            if (replacer) {
+                                phoneColors = replacer(phoneNum, isMatched)
+                            } else {
+                                phoneColors = new Array(11).fill(0).map((num, i) => {
+                                    return isMatched.index <= i && i < isMatched.index + isMatched[0].length ? 1 : 0
+                                }).join('')
+                            }
+                            phoneType = type
+                            break
+                        }
+                    }
+                    var html = '';
+                    for (var i = 0; i < phoneNum.length; i++) {
+                        if (phoneColors[i] == 1) {
+                            html += '<span style="color:red;">' + phoneNum[i] + '</span>'
+                        } else {
+                            html += '<span>' + phoneNum[i] + '</span>'
+                        }
+                    }
+                    return html
+                    console.log(html)
+
+                },
+                Getlocation() {
+                    var that = this;
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(that.skySuccess, that.skyError, options)
+                    }
+                    else {
+                        mui.toast("浏览器不支持定位");
+                        var that = this;
+                        that.cityName = "北京" + "北京市";
+                        sessionStorage.setItem('goodsProvinceName', "北京");
+                        sessionStorage.setItem('goodsCityName',"北京市");
+                        sessionStorage.setItem('goodsProvinceCode', "100");//获取手机号码需要用到归属地
+                        sessionStorage.setItem('goodsCityCode', "100");//获取手机号码需要用到归属地
+                    }
+                },
+                skySuccess(pos) {
+                    var that = this;
+                    that.getDetailLocation(pos.coords.longitude, pos.coords.latitude);
+                },
+                skyError() {
+                    //定位失败，直接去北京市
+                    var that = this;
+                    that.cityName = "北京" + "北京市";
+                    sessionStorage.setItem('goodsProvinceName', "北京");
+                    sessionStorage.setItem('goodsCityName', "北京市");
+                    sessionStorage.setItem('goodsProvinceCode', "100");//获取手机号码需要用到归属地
+                    sessionStorage.setItem('goodsCityCode', "100");//获取手机号码需要用到归属地
+                    that.onloadphone();
+                },
+                getDetailLocation(longitude, latitude) {
+                    var that = this;
+                    let url = 'https://api.tianditu.gov.cn/geocoder?type=geocode&tk=67f82d40059c4f166b2d0c809fcfe9fd'
+                    axios.get(url, { params: { postStr: "{'lon': " + longitude + ",'lat': " + latitude + ",'ver': 1}" } })
+                        .then(function (response) {
+
+                            console.log(response.data);
+                            if (response.data.status == "0") {
+                                var citys = response.data.result.addressComponent.city;
+                                that.setposition(citys);//设置搜索的城市id
+                            }
+                            else {
+                                //解析失败---直接北京市
+                                that.cityName = "北京" + "北京市";
+                                sessionStorage.setItem('goodsProvinceName', "北京");
+                                sessionStorage.setItem('goodsCityName', "北京市");
+                                sessionStorage.setItem('goodsProvinceCode', "100");//获取手机号码需要用到归属地
+                                sessionStorage.setItem('goodsCityCode', "100");//获取手机号码需要用到归属地
+                                that.onloadphone();
+                            }
+                        })
+                        .catch(function (error) {
+                            //接口失败----直接北京市
+                            that.cityName = "北京" + "北京市";
+                            sessionStorage.setItem('goodsProvinceName', "北京");
+                            sessionStorage.setItem('goodsCityName', "北京市");
+                            sessionStorage.setItem('goodsProvinceCode', "100");//获取手机号码需要用到归属地
+                            sessionStorage.setItem('goodsCityCode', "100");//获取手机号码需要用到归属地
+                            that.onloadphone();
+                        });
+                },
+                setposition(cityName) {
+                    var that = this;
+                    var pos = that.getposition(HMDate, cityName);
+                    if (pos[0] == "-1") {
+                        //mui.toast("我没有匹配到数据QAQ");
+                        //return false;
+                        that.cityName = "北京" + "北京市";
+                        sessionStorage.setItem('goodsProvinceName', "北京");
+                        sessionStorage.setItem('goodsCityName', "北京市");
+                        sessionStorage.setItem('goodsProvinceCode', "100");//获取手机号码需要用到归属地
+                        sessionStorage.setItem('goodsCityCode', "100");//获取手机号码需要用到归属地
+                        that.onloadphone();
+                    }
+                },
+                getposition(JsonArray, key) {
+                    var that = this;
+                    for (var index in JsonArray) {
+                        var obj = JsonArray[index];
+                        if (obj.text == key) {
+                            return new Array(index, 0);
+                        } else {
+                            if (obj.children.length > 0) {
+                                for (var i in obj.children) {
+
+                                    if (obj.children[i].text == key) {
+                                        console.log(obj.value);
+                                        console.log(obj.text);
+                                        console.log(obj.children[i]);
+                                        console.log(obj.children[i].value);
+                                        console.log(obj.children[i].text);
+
+                                        that.cityName = obj.text + obj.children[i].text;
+                                        sessionStorage.setItem('goodsProvinceName', obj.text);
+                                        sessionStorage.setItem('goodsCityName', obj.children[i].text);
+                                        sessionStorage.setItem('goodsProvinceCode', obj.value);//获取手机号码需要用到归属地
+                                        sessionStorage.setItem('goodsCityCode', obj.children[i].value);//获取手机号码需要用到归属地
+                                        that.onloadphone();
+                                        return new Array(index, i);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return new Array(-1, -1);
+                },
+                confirm() {
+
+                    var that = this;
+                    //if (that.cityName == '请选择省市') {
+                    //    mui.toast('请选择您所在的省份');
+                    //    return false;
+                    //}
+                    var goodsProvinceCode = '';
+                    var goodsCityCode = '';
+                    if (sessionStorage.getItem('goodsProvinceCode')) {
+                        goodsProvinceCode = sessionStorage.getItem('goodsProvinceCode')
+                    }
+                    if (sessionStorage.getItem('goodsCityCode')) {
+                        goodsCityCode = sessionStorage.getItem('goodsCityCode')
+                    }
+                    if (goodsProvinceCode == '' || goodsCityCode == '') {
+                        mui.toast('请选择您所在的省份');
+                        return false;
+                    }
+                    var txtFreeMobile = $("#txtFreeMobile").val().trim();
+                    if (txtFreeMobile == '') {
+                        mui.toast("请选择要下单号码");
+                        return false;
+                    }
+                    //txtFreeCheckcode
+                    var txtFreeCheckcode = $("#txtFreeCheckcode").val().trim();
+                    if (txtFreeCheckcode == '') {
+                        mui.toast("请选择要下单号码");
+                        return false;
+                    }
+                    var txtProviceCode = $("#txtProviceCode").val();
+                    if (txtProviceCode == '') {
+                        mui.toast("收货城市不能为空");
+                        return false;
+                    }
+                    var txtCityCode = $("#txtCityCode").val();
+                    if (txtCityCode == '') {
+                        mui.toast("收货城市不能为空");
+                        return false;
+                    }
+                    var txtCountycode = $("#txtCountycode").val();
+                    if (txtCountycode == '') {
+                        mui.toast("收货城市不能为空");
+                        return false;
+                    }
+                    var txtUserName = $("#txtUserName").val().trim();
+                    if (txtUserName == '') {
+                        mui.toast("姓名不能为空");
+                        return false;
+                    }
+                    var txtContactMobile = $("#txtContactMobile").val().trim();
+                    if (txtContactMobile == '' || txtContactMobile.length != 11) {
+                        mui.toast("手机号码不能为空");
+                        return false;
+                    }
+                    var txtAddress = $("#txtAddress").val().trim();
+                    if (txtAddress == '') {
+                        mui.toast("详细地址不能为空");
+                        return false;
+                    }
+                    var txtCard = $("#txtCard").val().trim();
+                    if (txtCard == '') {
+                        mui.toast("身份证号不能为空");
+                        return false;
+                    }
+                    else {
+                        //身份证号码为15位或者18位，15位时全为数字，18位前17位为数字，最后一位是校验位，可能为数字或字符X
+                        var reg = /(^\d{15}$)|(^\d{17}(\d|X)$)/;
+                        if (reg.test(txtCard) === false) {
+                            mui.toast("请输入正确的身份证号码");
+                            return false;
+                        }
+                    }
+
+
+                    if ($('#checkIds').is(':checked')) {
+                    }
+                    else {
+                        mui.toast("请勾选协议");
+                        return false;
+                    }
+                    $('#loadingBox').show();
+                    setTimeout(() => {
+                          axios.post('@Url.Action("getTradeOrder")', qs.stringify({
+                            orderMobile: txtFreeMobile,
+                            certificateName: txtUserName,
+                            certificateNumber: txtCard,
+                            goodsProvinceCode: goodsProvinceCode,
+                            goodsCityCode: goodsCityCode,
+                            sendProvinceCode: txtProviceCode,
+                            sendCityCode: txtCityCode,
+                            sendDistrictCode: txtCountycode,
+                            address: txtAddress,
+                            name: txtUserName,
+                            mobilePhone: txtContactMobile,
+                            numberCheckCode: txtFreeCheckcode,
+                            AppId:'@ViewBag.appid'
+                        }))
+                        .then(function (response) {
+                            $('#loadingBox').hide();
+                            console.log(response);
+                            if (response.data.success) {
+                                //mui.alert("您已提交成功");
+                                mui.toast("您已提交成功");
+                                location.href = "successs";
+                                return false;
+                            }
+                            else {
+                                mui.alert(response.data.message);
+                                return false;
+                            }
+                        })
+                        .catch(function (error) {
+                            mui.toast("获取号码出错，请稍后重试");
+                            return false;
+                        });
+                    }, 200);
+                },
+                phoneSelect() {
+                    var that = this;
+                    if (that.cityName == '请选择省市') {
+                        mui.toast('请选择您所在的省份');
+                        return false;
+                    }
+
+                    var goodsProvinceCode = '';
+                    var goodsCityCode = '';
+                    if (sessionStorage.getItem('goodsProvinceCode')) {
+                        goodsProvinceCode = sessionStorage.getItem('goodsProvinceCode')
+                    }
+                    if (sessionStorage.getItem('goodsCityCode')) {
+                        goodsCityCode = sessionStorage.getItem('goodsCityCode')
+                    }
+                    if (goodsProvinceCode == '' || goodsCityCode == '') {
+                        mui.toast('请选择您所在的省份');
+                        return false;
+                    }
+                    $('#loadingBoxs').show();
+                    that.GetPhone(goodsProvinceCode, goodsCityCode);
+                },
+                GetPhone(goodsProvinceCode, goodsCityCode) {
+
+                    phoneSelect();
+                    var that = this;
+                    axios.post('@Url.Action("getPhoneSelect")', qs.stringify({ provinceCode: goodsProvinceCode, cityCode: goodsCityCode, numberKeyword: that.mobilePhone }))
+                    .then(function (response) {
+                        $('#loadingBoxs').hide();
+                        console.log(response);
+                        console.log(response.data);
+                        if (response.data.code == "-1") {
+                            mui.toast(response.data.message);
+                            return false;
+                        }
+                        else if (response.data.code == 50) {
+                            mui.toast(response.data.message);
+                            return false;
+                        }
+                        else {
+                            that.numberList = response.data.data;//that.numberList.concat(response.data.data);
+                            console.log(that.numberList)
+                        }
+                    })
+                    .catch(function (error) {
+                        mui.toast("获取号码出错，请稍后重试");
+                        return false;
+                    });
+                },
+                selectNumber(mobile,checkCode) {
+                    //选中了手机号码
+                   /* mui.toast("我选中了号码" + mobile);*/
+                    console.log(mobile + "|" + checkCode);
+                    //txtFreeCheckcode   txtFreeMobile
+                    $("#txtFreeMobile").val(mobile);
+                    $("#txtFreeCheckcode").val(checkCode);
+                    $(".mask").css("display", "none");
+                    $(".windows").css("display", "none");
+                },
+                pageDown() {
+                    var that = this;
+                    console.log("我是页面" + that.pageNo);
+                    //下一页
+                    that.pageNo++;
+                    that.phoneSelect();
+                },
+                getpositionJarray(JsonArray, key) {
+                    var that = this;
+                    for (var index in JsonArray) {
+                        var obj = JsonArray[index];
+                        if (obj.value == key) {
+                            if (obj.value == "531") {
+                                //济南情况特殊，需要特殊处理
+                                if (obj.children.length > 0) {
+                                    for (var i in obj.children) {
+
+                                        if (obj.children[i].value == key) {
+                                            console.log(obj.value);
+                                            console.log(obj.text);
+                                            console.log(obj.children[i]);
+                                            console.log(obj.children[i].value);
+                                            console.log(obj.children[i].text);
+                                            return new Array(index, i);
+                                        }
+                                    }
+                                }
+                            }
+                            else {
+                                return new Array(index, 0);
+                            }
+                        } else {
+                            if (obj.children.length > 0) {
+                                for (var i in obj.children) {
+
+                                    if (obj.children[i].value == key) {
+                                        console.log(obj.value);
+                                        console.log(obj.text);
+                                        console.log(obj.children[i]);
+                                        console.log(obj.children[i].value);
+                                        console.log(obj.children[i].text);
+                                        return new Array(index, i);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return new Array(-1, -1);
+                },
+                getpositionJarrayTest(JsonArray, key) {
+                    var that = this;
+                    for (var index in JsonArray) {
+                        var obj = JsonArray[index];
+                        if (obj.text == key) {
+                            return new Array(index, 0);
+                        } else {
+                            if (obj.children.length > 0) {
+                                for (var i in obj.children) {
+
+                                    if (obj.children[i].text == key) {
+                                        console.log(obj.value);
+                                        console.log(obj.text);
+                                        console.log(obj.children[i]);
+                                        console.log(obj.children[i].value);
+                                        console.log(obj.children[i].text);
+                                        return new Array(index, i);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return new Array(-1, -1);
+                },
+            }
+        });
+
+        //监听文本框输入--输入地址输入
+        mui("#txtAddress")[0].addEventListener('input', function () {
+            console.log("currentValue:" + this.value);
+            if (this.value == "") {
+                //hiddenMobile
+                $("#hiddenMobile").hide();
+                $("#hiddenCard").hide();
+            } else {
+                $("#hiddenMobile").show();
+                $("#hiddenCard").show();
+            }
+
+        });
+
+        //mui("#txtContactMobile")[0].addEventListener('input', function () {
+        //    console.log("为什么不走了:" + this.value);
+        //    if (this.value == "") {
+        //        $("#hiddenCard").hide();
+        //    } else {
+        //        $("#hiddenCard").show();
+        //    }
+        //});
+
+
+        $("#myform").bind('search', function () {
+            console.log("确定？");
+            var r = /^[0-9][0-9]+$/gi;
+            if (r.test(app.mobilePhone)) {
+                //if (app.mobilePhone.length != 11) {
+                //    app.mobilePhone = '';
+                //    mui.toast("请输入正确手机号码");
+                //    return false;
+                //}
+            } else {
+                app.mobilePhone = '';
+                mui.toast("请输入正确手机号码");
+                return false;
+            }
+            console.log(app.mobilePhone);
+            document.activeElement.blur();//软键盘收起
+            if (app.mobilePhone.trim() == '' || app.mobilePhone.trim() == null) {
+                mui.toast("请输入正确手机号码");
+                return false;
+            } else {
+                app.phoneSelect();
+            }
+        });
+        mui(".mui-search").on('tap', '.mui-icon-clear', function () {
+            app.mobilePhone = '';
+            app.phoneSelect();
+            //mui.toast("删掉吧");
+        });
+
+        $(function () {
+            //var picker = new mui.PopPicker(); //初始化popPicker组件
+            //二级联示例
+            var cityPicker = new mui.PopPicker({
+                layer: 2
+            });
+            cityPicker.setData(HMDate);
+            var showCityPickerButton = document.getElementById('showCityPicker');
+            showCityPickerButton.addEventListener('tap', function (event) {
+                cityPicker.show(function (items) {
+                    console.log(items);
+                    app.cityName = items[0].text + items[1].text;
+                    //sessionStorage.setItem('goodsProvinceName', obj.text);
+                    //sessionStorage.setItem('goodsCityName', obj.children[i].text);
+                    sessionStorage.setItem('goodsProvinceCode', items[0].value);//获取手机号码需要用到归属地
+                    sessionStorage.setItem('goodsCityCode', items[1].value);//获取手机号码需要用到归属地
+                    app.onloadphone();
+                });
+            }, false);
+        })
+
+        var flag = true;
+        $(".more").click(function () {
+            if (flag) {
+                $(".bottom_three").css("display", "block");
+                $(".bottom_four").css("display", "block");
+                $(".more_text").text("收起");
+                $(".more_icon").removeClass("icon-gengduo").addClass("icon-a-zu318");
+                flag = false;
+            } else {
+                $(".bottom_three").css("display", "none");
+                $(".bottom_four").css("display", "none");
+                $(".more_text").text("更多");
+                $(".more_icon").removeClass("icon-a-zu318").addClass("icon-gengduo");
+            }
+
+        })
+
+
+        function closeSuc() {
+            $(".mask").css("display", "none");
+            $(".windows4").css("display", "none");
+        }
+        function confirm() {
+            //$(".mask").css("display", "block");
+            //$(".windows4").css("display", "block");
+
+        }
+        function capacityDetail() {
+            $(".mask").css("display", "block");
+            $(".windows1").css("display", "block");
+        }
+        function moveInfo() {
+            console.log("我点击了勾选");
+            $(".mask").css("display", "block");
+            $(".windows2").css("display", "block");
+        }
+        function seeDetail() {
+            $(".mask").css("display", "block");
+            $(".windows3").css("display", "block");
+        }
+        function closeMove() {
+            $(".mask").css("display", "none");
+            $(".windows2").css("display", "none");
+        }
+        function closeSee() {
+            $(".mask").css("display", "none");
+            $(".windows3").css("display", "none");
+        }
+        function citySelect() {
+            document.activeElement.blur();//隐藏软键盘
+            //选择省市区
+            var city_picker = new mui.PopPicker({ layer: 3 });
+            city_picker.setData(init_city_picker);
+
+            var goodsCityCode = '';
+            if (sessionStorage.getItem('goodsCityCode')) {
+                goodsCityCode = sessionStorage.getItem('goodsCityCode')
+            }
+
+            var goodsProvinceCode = '';
+            if (sessionStorage.getItem('goodsProvinceCode')) {
+                goodsProvinceCode = sessionStorage.getItem('goodsProvinceCode')
+            }
+
+
+            var pos = app.getpositionJarray(init_city_picker, goodsCityCode);
+            console.log(pos);
+            if (pos[0] == "-1") { }
+            else {
+                city_picker.pickers[0].setSelectedIndex(pos[0]);
+                city_picker.pickers[1].setSelectedIndex(pos[1]);
+            }
+
+            setTimeout(function () {
+                city_picker.show(function (items) {
+                    console.log(items, '我是选中后的数据1233');
+
+                    $(".selcet_city").val(items[0].text + items[1].text + items[2].text);
+                    sessionStorage.setItem('goodsProvinceCode', items[0].value);//获取手机号码需要用到归属地
+                    sessionStorage.setItem('goodsCityCode', items[1].value);//获取手机号码需要用到归属地
+                    sessionStorage.setItem('goodsProvinceName', items[0].text);
+                    sessionStorage.setItem('goodsCityName', items[1].text);
+                    $("#txtProviceCode").val(items[0].value);
+                    $("#txtCityCode").val(items[1].value);
+                    $("#txtCountycode").val(items[2].value);
+                    app.onloadphones();
+
+                });
+            }, 200);
+        }
+        function phoneSelect() {
+            $(".mask").css("display", "block");
+            $(".windows").css("display", "block");
+        }
+        function closePhone() {
+            $(".mask").css("display", "none");
+            $(".windows").css("display", "none");
+        }
+        function closeCapacity() {
+            $(".mask").css("display", "none");
+            $(".windows1").css("display", "none");
+        }
+
+        var intDiff = parseInt(60 * 10);//倒计时总秒数量
+        function timer(intDiff) {
+            window.setInterval(function () {
+                var day = 0,
+                    hour = 0,
+                    minute = 0,
+                    second = 0;//时间默认值
+                if (intDiff > 0) {
+                    day = Math.floor(intDiff / (60 * 60 * 24));
+                    hour = Math.floor(intDiff / (60 * 60)) - (day * 24);
+                    minute = Math.floor(intDiff / 60) - (day * 24 * 60) - (hour * 60);
+                    second = Math.floor(intDiff) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60);
+                    //console.log(day + ":" + hour + ":" + minute + ":" + second)
+                }
+                if (minute <= 9) minute = '0' + minute;
+                if (second <= 9) second = '0' + second;
+                $('.hour').html(hour);
+                $('.minute').html(minute);
+                $('.second').html(second);
+                intDiff--;
+            }, 1000);
+        }
+
+        //$(function(){
+        timer(intDiff);
+                //});
+
+    </script>
+</body>
+</html>
